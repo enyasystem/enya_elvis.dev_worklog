@@ -3,11 +3,11 @@
 > **Owner:** Enya Elvis (Elvis)  
 > **Purpose:** Personal monthly worklog tracking full-stack, UI/UX, teaching, CDS activities, and personal growth.
 
-[![Worklog Status](https://img.shields.io/badge/Worklog-active-brightgreen)]()
-[![Commits](https://img.shields.io/badge/Commits-%%COMMITS%%-blueviolet)]()
-[![PRs](https://img.shields.io/badge/PRs-%%PRS%%-informational)]()
-[![Issues](https://img.shields.io/badge/Issues-%%ISSUES%%-orange)]()
-[![Deploys](https://img.shields.io/badge/Deploys-%%DEPLOYS%%-success)]()
+[![Worklog Status](https://img.shields.io/badge/Worklog-active-brightgreen)](https://github.com/enyasystem/enya_elvis.dev_worklog)
+[![Last commit](https://img.shields.io/github/last-commit/enyasystem/enya_elvis.dev_worklog)](https://github.com/enyasystem/enya_elvis.dev_worklog/commits)
+[![PRs](https://img.shields.io/github/issues-pr/enyasystem/enya_elvis.dev_worklog?color=informational)](https://github.com/enyasystem/enya_elvis.dev_worklog/pulls)
+[![Issues](https://img.shields.io/github/issues/enyasystem/enya_elvis.dev_worklog?color=orange)](https://github.com/enyasystem/enya_elvis.dev_worklog/issues)
+[![Worklog automation](https://img.shields.io/github/actions/workflow/status/enyasystem/enya_elvis.dev_worklog/new-worklog.yml?branch=main&label=worklog%20automation&color=success)](https://github.com/enyasystem/enya_elvis.dev_worklog/actions)
 
 ---
 

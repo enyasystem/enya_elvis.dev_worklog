@@ -1,67 +1,137 @@
-# Worklog — YYYY-MM
-
-> Month: YYYY-MM
-> Author: Enya Elvis
-
-## TL;DR
-- Highlights:
-- Key metrics / numbers:
-
-## Weekly Breakdown
-### Week 1
-- Tasks:
-- Wins:
-- Blockers / Notes:
-
-### Week 2
-- Tasks:
-- Wins:
-- Blockers / Notes:
-
-### Week 3
-- Tasks:
-- Wins:
-- Blockers / Notes:
-
-### Week 4
-- Tasks:
-- Wins:
-- Blockers / Notes:
-
-## Frontend & UI
-- Features worked on:
-- Components added / updated:
-- Design notes / screenshots:
-
-## Backend & API
-- Services touched:
-- DB changes:
-- Important PRs / links:
-
-## Design / UX
-- Case studies / flows:
-- Figma links:
-
-## Teaching, Mentoring & CDS
-- Sessions held:
-- Resources shared:
-
-## Personal Growth & Reflections
-- What went well:
-- What I learned:
-- Experiments to try next month:
-
-## Bugs & Hotfixes
-- Notable bugs solved:
-- Postmortem notes:
-
-## Assets
-- Place screenshots or attachments in `assets/YYYY-MM/` and reference them here.
-
-## Links
-- Related PRs:
-- Notion / docs:
+# {Month YYYY} — Monthly Worklog
+**Author:** Enya Elvis (Elvis)  •  **Timezone:** Africa/Lagos  
+**Repo:** `enya_elvis.dev_worklog`
 
 ---
 
-*Template: copy this to `worklogs/YYYY-MM.md` and fill out.*
+## 1️⃣ Monthly Summary
+**Theme:** _(e.g., Performance, UI Enhancement, API Stability, Teaching, Product Launch)_  
+Short paragraph summarizing the month’s overall goals, achievements, and focus areas.
+
+---
+
+## 2️⃣ Weekly Progress
+> Use ISO week dates: `YYYY-MM-DD → YYYY-MM-DD`
+
+### Week 1
+**Focus:**  _Main priority_
+- ✅ Completed:
+	- [x] Task — short context (link if possible)
+- 🚧 Blockers:
+	- Short note
+
+### Week 2
+**Focus:**  _Main priority_
+- ✅ Completed:
+	- [x] Task — short context (link if possible)
+- 🚧 Blockers:
+	- Short note
+
+### Week 3
+**Focus:**  _Main priority_
+- ✅ Completed:
+	- [x] Task — short context (link if possible)
+- 🚧 Blockers:
+	- Short note
+
+### Week 4
+**Focus:**  _Main priority_
+- ✅ Completed:
+	- [x] Task — short context (link if possible)
+- 🚧 Blockers:
+	- Short note
+
+---
+
+## 3️⃣ Challenges & Lessons Learned
+| Challenge | Lesson / Next Step |
+|------------|--------------------|
+| Example: API rate limits | Implement caching & better error handling |
+| Example: CSS layout issue | Improved component-based design |
+
+---
+
+## 4️⃣ Frontend / UI Work
+- **Components Built:**  
+	`ComponentName` — description & links (e.g., PR #12, Storybook)
+- **Performance:** Lighthouse improvements, reduced bundle size, etc.
+- **Design System Work:** Tokens, accessibility fixes, UI polish.
+
+---
+
+## 5️⃣ Backend / API Work
+- **Endpoints Created / Updated:** endpoint name + purpose.
+- **Integrations:** e.g., Payment gateways, Auth, 3rd-party APIs.
+- **Infra & DB:** schema updates, cron jobs, or deployments.
+
+---
+
+## 6️⃣ Design / UX Notes
+- **Insights:** new feedback or usability test learnings.
+- **Decisions:** explain key design or UX choices.
+- **Assets:** link to Figma, mockups, or prototypes.
+
+---
+
+## 7️⃣ Achievements / Wins
+✨ Highlights from the month:
+- 🚀 Launches / Deployments
+- 🏆 Certifications / Learning milestones
+- 💬 Mentoring / Collaboration moments
+
+---
+
+## 8️⃣ Upcoming Goals
+🎯 _Goals for next month:_
+- [ ] Goal 1 — description
+- [ ] Goal 2 — description
+- [ ] Goal 3 — description
+
+---
+
+## 9️⃣ Tools & Stack Updates
+🧰 _Stack changes / experiments:_
+- Added / Updated dependencies.
+- Tried new frameworks or libraries.
+- Notes about performance, CI/CD, or automation improvements.
+
+---
+
+## 🔟 Reflections (Personal & Dev Growth)
+Short personal paragraph:
+- What you learned.
+- What you’re proud of.
+- What you’ll improve next month.
+
+---
+
+## 📸 Demos & Assets
+Add visuals or demo links here:
+```
+![Demo Screenshot](/assets/YYYY-MM/demo.png)
+```
+
+---
+
+### 🧠 How to Keep and Update Your Work Log
+Good news: there’s no one right way.  
+Even better news: you can choose what works best for you.
+
+**✍️ Tools & Platforms:**
+- ✅ Notion — structured logs
+- ✅ GitHub README or Gists — dev-friendly notes
+- ✅ Google Docs / Markdown — flexible
+- ✅ LinkedIn — for public reflections
+- ✅ Blogs (Medium, Substack) — community sharing
+
+**🗓️ What to Include Each Month:**
+- What did I work on?
+- Bugs solved
+- Achievements
+- What didn’t go well — and lessons
+- Standout moments or breakthroughs
+
+---
+
+📄 _Inspired by templates from_ **Paul Solt**, **Gergely Orosz**, and **Julia Evans**.  
+*Adapted and personalized for Enya Elvis — enya_elvis.dev_worklog.*

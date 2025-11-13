@@ -1,0 +1,20 @@
+# Node / general
+node_modules/
+.env
+.env.local
+.DS_Store
+npm-debug.log*
+.yarn-integrity
+
+# VSCode
+.vscode/
+
+# Mac
+*.DS_Store
+
+# Build
+dist/
+build/
+
+# Assets (keep source in repo)
+# /assets/**/ (uncomment if you prefer not to track large images)

@@ -1,0 +1,42 @@
+name: Create monthly worklog
+
+on:
+  schedule:
+    - cron: '0 0 1 * *' # At 00:00 on day-of-month 1
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  create-worklog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Ensure directories
+        run: |
+          mkdir -p worklogs
+          mkdir -p assets/$(date +'%Y-%m')
+
+      - name: Create monthly worklog from template
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          FILE="worklogs/$(date +'%Y-%m').md"
+          if [ ! -f "$FILE" ]; then
+            if [ -f WORKLOG-TEMPLATE.md ]; then
+              cp WORKLOG-TEMPLATE.md "$FILE"
+            else
+              echo "# Worklog - $(date +'%Y-%m')" > "$FILE"
+            fi
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add "$FILE"
+            git commit -m "chore: add monthly worklog for $(date +'%Y-%m')" || echo "No changes to commit"
+            git push
+          else
+            echo "Worklog already exists: $FILE"
+          fi

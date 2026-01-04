@@ -27,8 +27,8 @@ jobs:
 
       - name: Commit changes
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "Enya Elvis"
+          git config user.email "enyaelvis@gmail.com"
           git add worklogs/*.md
           git commit -m "chore(worklog): daily update (auto)" || echo "no changes"
           git push

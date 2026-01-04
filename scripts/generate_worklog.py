@@ -123,6 +123,19 @@ def build_day_markdown(day: datetime.date, commits):
     lines = []
     day_str = day.isoformat()
     lines.append(f"### {day_str} — Commits summary\n\n")
+    # stats for the day
+    stats = compute_stats_for_commits(commits)
+    if stats and stats.get("commits", 0) > 0:
+        lines.append("**Stats:** ")
+        lines.append(f"{stats['commits']} commit")
+        if stats['commits'] != 1:
+            lines.append("s")
+        lines.append(" — ")
+        lines.append(f"{stats['files_changed']} files changed")
+        lines.append(" — ")
+        lines.append(f"+{stats['insertions']} / -{stats['deletions']}\n\n")
+    else:
+        lines.append("**Stats:** 0 commits — 0 files changed — +0 / -0\n\n")
     for c in commits:
         short = c["sha"][:7]
         lines.append(f"- {short} — {c['message']} ({c['author']})\n")
@@ -186,6 +199,37 @@ def find_assets_for_day(year: int, month: int, day: int) -> List[str]:
     day_prefix = f"{year}-{month:02d}-{day:02d}"
     matched = [f for f in files if f.startswith(day_prefix) or day_prefix in f]
     return matched
+
+
+def compute_stats_for_commits(commits) -> dict:
+    """Return aggregated stats for a list of commits: commits count, files changed, insertions, deletions."""
+    total_commits = len(commits)
+    total_files = 0
+    total_ins = 0
+    total_del = 0
+    for c in commits:
+        sha = c.get("sha")
+        try:
+            out = run_git(["show", "--shortstat", "--pretty=format:", "--no-patch", sha])
+        except Exception:
+            continue
+        # sample output: " 1 file changed, 2 insertions(+), 1 deletion(-)"
+        m_files = re.search(r"(\d+)\s+file[s]? changed", out)
+        m_ins = re.search(r"(\d+)\s+insertion[s]?\(\+\)", out)
+        m_del = re.search(r"(\d+)\s+deletion[s]?\(-\)", out)
+        if m_files:
+            total_files += int(m_files.group(1))
+        if m_ins:
+            total_ins += int(m_ins.group(1))
+        if m_del:
+            total_del += int(m_del.group(1))
+
+    return {
+        "commits": total_commits,
+        "files_changed": total_files,
+        "insertions": total_ins,
+        "deletions": total_del,
+    }
 
 
 

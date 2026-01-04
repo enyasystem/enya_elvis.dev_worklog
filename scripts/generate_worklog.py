@@ -14,6 +14,7 @@ from __future__ import annotations
 import subprocess
 import sys
 import datetime
+import re
 import os
 from collections import defaultdict
 
@@ -112,6 +113,65 @@ def build_markdown(year: int, month: int, commits):
     return "".join(lines)
 
 
+def build_day_markdown(day: datetime.date, commits):
+    lines = []
+    day_str = day.isoformat()
+    lines.append(f"### {day_str} — Commits summary\n\n")
+    for c in commits:
+        short = c["sha"][:7]
+        lines.append(f"- {short} — {c['message']} ({c['author']})\n")
+    lines.append("\n#### Details\n\n")
+    for c in commits:
+        short = c["sha"][:7]
+        lines.append(f"- {short} — {c['message']} ({c['author']})\n")
+        lines.append(f"  - Date: {c['date'].astimezone().strftime('%Y-%m-%d %H:%M:%S %z')}\n")
+        files = get_files_for_commit(c["sha"])[:20]
+        if files:
+            lines.append("  - Files:\n")
+            for f in files:
+                lines.append(f"    - {f}\n")
+        else:
+            lines.append("  - Files: (none)\n")
+        lines.append("  - Message:\n")
+        lines.append(f"    - {c['message']}\n\n")
+
+    return "".join(lines)
+
+
+def update_day_in_file(year: int, month: int, day: datetime.date, day_content: str):
+    out_dir = os.path.join(os.getcwd(), "worklogs")
+    os.makedirs(out_dir, exist_ok=True)
+    path = os.path.join(out_dir, f"{year}-{month:02d}.md")
+    if not os.path.exists(path):
+        # create new month file with header and day content
+        tpl = load_template()
+        header = format_month_header(tpl, year, month)
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(header)
+            f.write("\n")
+            f.write(day_content)
+        print(f"Created {path} with {day.isoformat()}")
+        return
+
+    # file exists: replace day's section if present, otherwise append
+    with open(path, "r", encoding="utf-8") as f:
+        text = f.read()
+
+    # regex to match the day's section starting at line beginning
+    pattern = rf"(?ms)^(###\s+{re.escape(day.isoformat())} — Commits summary).*?(?=^###\s|\Z)"
+    if re.search(pattern, text):
+        new_text = re.sub(pattern, day_content, text)
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(new_text)
+        print(f"Replaced {day.isoformat()} in {path}")
+    else:
+        # append at end
+        with open(path, "a", encoding="utf-8") as f:
+            f.write("\n")
+            f.write(day_content)
+        print(f"Appended {day.isoformat()} to {path}")
+
+
 def write_worklog(year: int, month: int, content: str):
     out_dir = os.path.join(os.getcwd(), "worklogs")
     os.makedirs(out_dir, exist_ok=True)
@@ -122,22 +182,55 @@ def write_worklog(year: int, month: int, content: str):
 
 
 def parse_args(argv):
-    if len(argv) >= 2 and not argv[1].startswith("--"):
-        token = argv[1]
-    else:
-        token = None
-    if token:
-        parts = token.split("-")
+    # supports:
+    #  - positional YYYY-MM
+    #  - --day YYYY-MM-DD
+    #  - no args -> current month
+    day_arg = None
+    pos = None
+    i = 1
+    while i < len(argv):
+        a = argv[i]
+        if a in ("--day", "-d") and i + 1 < len(argv):
+            day_arg = argv[i + 1]
+            i += 2
+            continue
+        if not a.startswith("-") and pos is None:
+            pos = a
+        i += 1
+
+    if day_arg:
+        # return tuple indicating day mode: (year, month, day)
+        y, m, d = day_arg.split("-")
+        return (int(y), int(m), int(d))
+
+    if pos:
+        parts = pos.split("-")
         if len(parts) >= 2:
             year = int(parts[0]); month = int(parts[1])
-            return year, month
-    # default: current month
+            return (year, month)
+
     now = datetime.datetime.now()
-    return now.year, now.month
+    return (now.year, now.month)
 
 
 def main(argv):
-    year, month = parse_args(argv)
+    parsed = parse_args(argv)
+    # day mode
+    if isinstance(parsed, tuple) and len(parsed) == 3:
+        y, m, d = parsed
+        day = datetime.date(y, m, d)
+        start = datetime.datetime(y, m, d, 0, 0, 0, tzinfo=datetime.timezone.utc)
+        end = start + datetime.timedelta(days=1)
+        commits = get_commits(start, end)
+        if not commits:
+            print(f"No commits found for {day.isoformat()}")
+        day_content = build_day_markdown(day, commits)
+        update_day_in_file(y, m, day, day_content)
+        return
+
+    # month mode
+    year, month = parsed
     start, end = month_range(year, month)
     commits = get_commits(start, end)
     if not commits:

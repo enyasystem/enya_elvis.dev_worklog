@@ -2,7 +2,8 @@ name: Daily Worklog Update
 
 on:
   schedule:
-    - cron: '0 2 * * *' # 02:00 UTC daily
+    # runs daily at 02:00 Africa/Lagos (UTC+1) -> 01:00 UTC
+    - cron: '0 1 * * *'
   workflow_dispatch: {}
 
 jobs:

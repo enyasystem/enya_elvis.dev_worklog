@@ -17,6 +17,7 @@ import datetime
 import re
 import os
 from collections import defaultdict
+from typing import List
 
 
 def run_git(args):
@@ -110,6 +111,11 @@ def build_markdown(year: int, month: int, commits):
             lines.append("  - Message:\n")
             lines.append(f"    - {c['message']}\n\n")
 
+    # append assets section for month (images / links)
+    month_assets = find_assets_for_month(year, month)
+    if month_assets:
+        lines.append(assets_markdown_for_month(year, month, month_assets))
+
     return "".join(lines)
 
 
@@ -135,7 +141,52 @@ def build_day_markdown(day: datetime.date, commits):
         lines.append("  - Message:\n")
         lines.append(f"    - {c['message']}\n\n")
 
+    # include day-specific assets (files named with YYYY-MM-DD prefix or containing the date)
+    day_assets = find_assets_for_day(day.year, day.month, day.day)
+    if day_assets:
+        assets_md = assets_markdown_for_month(day.year, day.month, day_assets)
+        lines.append(assets_md)
+
     return "".join(lines)
+
+
+def assets_dir_for_month(year: int, month: int) -> str:
+    return os.path.join(os.getcwd(), "assets", f"{year}-{month:02d}")
+
+
+def find_assets_for_month(year: int, month: int) -> List[str]:
+    d = assets_dir_for_month(year, month)
+    if not os.path.isdir(d):
+        return []
+    files = [f for f in os.listdir(d) if os.path.isfile(os.path.join(d, f))]
+    files.sort()
+    return files
+
+
+def assets_markdown_for_month(year: int, month: int, files: List[str]) -> str:
+    if not files:
+        return ""
+    lines = ["---\n", "## 📸 Demos & Assets\n\n"]
+    assets_path = f"/assets/{year}-{month:02d}"
+    for fn in files:
+        ext = fn.lower().rsplit('.', 1)[-1] if '.' in fn else ''
+        url = f"{assets_path}/{fn}"
+        title = fn
+        if ext in ("png", "jpg", "jpeg", "gif", "webp"):
+            lines.append(f"![{title}]({url})\n\n")
+            lines.append(f"[View full image]({url})\n\n")
+        else:
+            lines.append(f"- [{title}]({url})\n")
+    lines.append("\n")
+    return "".join(lines)
+
+
+def find_assets_for_day(year: int, month: int, day: int) -> List[str]:
+    files = find_assets_for_month(year, month)
+    day_prefix = f"{year}-{month:02d}-{day:02d}"
+    matched = [f for f in files if f.startswith(day_prefix) or day_prefix in f]
+    return matched
+
 
 
 def update_day_in_file(year: int, month: int, day: datetime.date, day_content: str):

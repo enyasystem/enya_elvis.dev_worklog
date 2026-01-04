@@ -84,6 +84,27 @@ def build_markdown(year: int, month: int, commits):
     header = format_month_header(tpl, year, month)
     lines = [header, "\n"]
 
+    # month summary (badges + table)
+    month_stats = compute_stats_for_commits(commits)
+    def build_month_summary(year: int, month: int, stats: dict) -> str:
+        commits_n = stats.get("commits", 0)
+        files_n = stats.get("files_changed", 0)
+        ins = stats.get("insertions", 0)
+        dels = stats.get("deletions", 0)
+        badges = []
+        badges.append(f"![commits](https://img.shields.io/badge/commits-{commits_n}-blue?style=flat-square)")
+        badges.append(f"![files](https://img.shields.io/badge/files-{files_n}-informational?style=flat-square)")
+        badges.append(f"![+ins](https://img.shields.io/badge/insertions-%2B{ins}-brightgreen?style=flat-square)")
+        badges.append(f"![\-del](https://img.shields.io/badge/deletions-%2D{dels}-red?style=flat-square)")
+        table = ["\n", "**Monthly Totals**\n\n", "| Metric | Value |\n", "|---:|---:|\n"]
+        table.append(f"| Commits | {commits_n} |\n")
+        table.append(f"| Files changed | {files_n} |\n")
+        table.append(f"| Insertions | +{ins} |\n")
+        table.append(f"| Deletions | -{dels} |\n\n")
+        return " ".join(badges) + "\n\n" + "".join(table)
+
+    lines.append(build_month_summary(year, month, month_stats))
+
     # group commits by local date
     groups = defaultdict(list)
     for c in commits:

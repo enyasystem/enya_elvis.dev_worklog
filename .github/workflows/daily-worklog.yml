@@ -1,5 +1,9 @@
 name: Daily Worklog Update
 
+# Request write permission so the job can push changes using GITHUB_TOKEN
+permissions:
+  contents: write
+
 on:
   schedule:
     # runs daily at 00:00 Africa/Lagos (UTC+1) -> 23:00 UTC previous day
@@ -13,7 +17,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          # ensure the action can push using the provided token
           persist-credentials: true
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -26,9 +32,13 @@ jobs:
           python scripts/generate_worklog.py --day "$YESTERDAY"
 
       - name: Commit changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "Enya Elvis"
           git config user.email "enyaelvis@gmail.com"
           git add worklogs/*.md
           git commit -m "chore(worklog): daily update (auto)" || echo "no changes"
-          git push
+          # configure authenticated remote using the token so push succeeds
+          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}
+          git push origin HEAD:${{ github.ref_name }}

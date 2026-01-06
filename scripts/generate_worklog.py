@@ -288,6 +288,22 @@ def update_day_in_file(year: int, month: int, day: datetime.date, day_content: s
         print(f"Appended {day.isoformat()} to {path}")
 
 
+def write_day_file(day: datetime.date, day_content: str):
+    out_dir = os.path.join(os.getcwd(), "worklogs")
+    os.makedirs(out_dir, exist_ok=True)
+    path = os.path.join(out_dir, f"{day.isoformat()}.md")
+    # build a small daily header
+    header = []
+    header.append(f"# {day.isoformat()} — Daily Worklog\n")
+    header.append("**Author:** Enya Elvis (Elvis)  •  **Timezone:** Africa/Lagos  \n")
+    header.append("**Repo:** `enya_elvis.dev_worklog`\n\n")
+    header.append("---\n\n")
+    with open(path, "w", encoding="utf-8") as f:
+        f.write("".join(header))
+        f.write(day_content)
+    print(f"Wrote daily file {path}")
+
+
 def write_worklog(year: int, month: int, content: str):
     out_dir = os.path.join(os.getcwd(), "worklogs")
     os.makedirs(out_dir, exist_ok=True)
@@ -342,7 +358,8 @@ def main(argv):
         if not commits:
             print(f"No commits found for {day.isoformat()}")
         day_content = build_day_markdown(day, commits)
-        update_day_in_file(y, m, day, day_content)
+        # write a standalone daily file (e.g. worklogs/2026-01-05.md)
+        write_day_file(day, day_content)
         return
 
     # month mode

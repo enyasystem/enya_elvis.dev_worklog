@@ -99,7 +99,7 @@ def main():
             with open(monthfile, 'w', encoding='utf-8') as f:
                 f.write(f"# Worklog - {target_date[:7]}\n\n")
 
-    # Read existing content and replace existing block for the target_date if present
+    # Read existing content and replace existing block for the target_date if present 
     with open(monthfile, 'r', encoding='utf-8') as f:
         content = f.read()
 
